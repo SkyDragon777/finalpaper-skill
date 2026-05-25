@@ -1,6 +1,6 @@
-# Paper-to-Markdown Pipeline — MinerU + AI Agent
+# finalpaper — AI Agent Paper Reading Report
 
-An opinionated pipeline that parses academic PDF papers into structured Markdown using the [MinerU Precision API](https://mineru.net), then generates a detailed bilingual reading guide (`finalpaper.md` / `finalpaper_cn.md`) with author backgrounds, concept explanations, and embedded figure-by-figure analysis — driven by any LLM-powered AI agent (Codex CLI, Claude Code, Cursor, etc.).
+An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU Precision API](https://mineru.net), then generate bilingual reading guides with author backgrounds, concept explanations, and embedded figure analysis. Each PDF must be ≤200 pages and ≤200 MB (MinerU API limits).
 
 ## What This Project Does
 

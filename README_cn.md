@@ -1,6 +1,6 @@
-# Paper-to-Markdown 流水线 — MinerU + AI Agent
+# finalpaper — AI Agent 论文阅读报告
 
-一条带有明确设计偏好的流水线，利用 [MinerU Precision API](https://mineru.net) 将学术 PDF 论文解析为结构化 Markdown，随后生成包含作者背景、概念解释和内嵌逐图分析的详细双语阅读指南（`finalpaper.md` / `finalpaper_cn.md`）——可由任何 LLM 驱动的 AI agent（Codex CLI、Claude Code、Cursor 等）执行。
+为 AI agent 设计的可复用技能：通过 [MinerU Precision API](https://mineru.net) 解析文件夹下所有 PDF 论文，生成包含作者背景、概念解释和内嵌逐图分析的双语阅读指南。每篇 PDF 需 ≤200 页且 ≤200 MB（MinerU API 限制）。
 
 ## 本项目做什么
 

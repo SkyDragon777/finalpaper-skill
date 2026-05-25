@@ -1,6 +1,6 @@
-# Skill: PDF Paper Reading Guide Pipeline
+# Skill: finalpaper — AI Agent Paper Reading Report
 
-This folder contains a reusable skill for parsing academic PDF papers with the [MinerU Precision API](https://mineru.net) and generating bilingual reading guides. Compatible with any LLM-powered agent (Codex CLI, Claude Code, Cursor, opencode, etc.).
+Parse all PDF papers (≤200 pages, ≤200 MB each) in this folder with the [MinerU Precision API](https://mineru.net) and generate bilingual reading guides. Compatible with any LLM-powered agent (Codex CLI, Claude Code, Cursor, opencode, etc.).
 
 > **You are an AI agent executing this skill.** Follow the instructions below to parse PDFs and generate `finalpaper.md` / `finalpaper_cn.md`.
 
