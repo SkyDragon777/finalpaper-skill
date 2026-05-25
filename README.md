@@ -1,5 +1,7 @@
 # finalpaper — AI Agent Paper Reading Report
 
+[中文版](README_cn.md)
+
 An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU Precision API](https://mineru.net), then generate bilingual reading guides with author backgrounds, concept explanations, and embedded figure analysis. Each PDF must be ≤200 pages and ≤200 MB (MinerU API limits).
 
 ## What This Project Does

@@ -1,5 +1,7 @@
 # finalpaper — AI Agent 论文阅读报告
 
+[English](README.md)
+
 为 AI agent 设计的可复用技能：通过 [MinerU Precision API](https://mineru.net) 解析文件夹下所有 PDF 论文，生成包含作者背景、概念解释和内嵌逐图分析的双语阅读指南。每篇 PDF 需 ≤200 页且 ≤200 MB（MinerU API 限制）。
 
 ## 本项目做什么

@@ -1,3 +1,6 @@
+# Source PDFs (do not commit)
+*.pdf
+
 # MinerU API runtime artifacts (large, ephemeral)
 mineru/_api_runs/
 mineru/*.zip
