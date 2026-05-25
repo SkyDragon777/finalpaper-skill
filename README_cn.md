@@ -13,40 +13,43 @@
    - 深度概念讲解
    - 逐图描述（内嵌图片）
    - 历史背景与学术圈分析
-3. **自文档化** → `agent.md` 作为内置指引，供任何后续 agent 无需人工指导即可继续处理更多论文。
+3. **自文档化** → `SKILL.md` 作为内置指引，供任何后续 agent 无需人工指导即可继续处理更多论文。
 
 ## 目录结构
 
 ```
 .
+├── SKILL.md                            # Agent skill 说明
 ├── README.md                           # 本文件（英文）
 ├── README_cn.md                        # 本文件（中文）
-├── agent.md                            # 流水线 agent 指令
-├── finalpaper.md                       # 最终阅读指南（英文）
-├── finalpaper_cn.md                    # 最终阅读指南（中文）
-├── *.pdf                               # 源论文
+├── finalpaper.md                       # 示例输出（英文）
+├── finalpaper_cn.md                    # 示例输出（中文）
+├── references/
+│   ├── mineru-api.md                   # MinerU API 工作流参考
+│   ├── output-rules.md                 # finalpaper.md 生成规则
+│   └── translation-rules.md            # 双语翻译规则
 ├── .gitignore
 └── mineru/
     ├── manifest.json                   # 机器可读的处理状态
-    ├── <paper-slug>/                   # 每篇论文一个目录
-    │   ├── full.md                     # MinerU Markdown 输出
-    │   ├── *_content_list.json         # 结构化内容清单
-    │   ├── *_content_list_v2.json      # 按页分组的结构化输出
-    │   └── images/                     # 提取的图示
+    ├── <paper-slug>/
+    │   ├── full.md
+    │   ├── *_content_list.json
+    │   ├── *_content_list_v2.json
+    │   └── images/
 ```
 
 ## 快速开始
 
 ### 前置条件
 
-- [MinerU API token](https://mineru.net/apiManage/token)。请将 `agent.md` 中的 `<YOUR_MINERU_API_TOKEN_HERE>` 替换为你的 token，或者让 agent 询问你后手动填入。
+- [MinerU API token](https://mineru.net/apiManage/token)。请将 `SKILL.md` 中的 `<YOUR_MINERU_API_TOKEN_HERE>` 替换为你的 token，或者让 agent 询问你后手动填入。
 - Python 3.10+，安装 `requests` 库（或通过 `pip install mineru-open-sdk`）
 - Git（用于版本控制）
 
 ### 处理新论文
 
 1. 将 PDF 文件放入本目录。
-2. 按照 `agent.md` 中描述的 agent 工作流运行：
+2. 按照 `SKILL.md` 中描述的 agent 工作流运行：
    - 检查 `mineru/manifest.json`，跳过已处理的论文
    - 将未处理的 PDF 上传至 MinerU Precision API：
      ```
@@ -57,7 +60,7 @@
    - 将结果 zip 解压至 `mineru/<paper-slug>/`
 3. 所有 PDF 解析完成后，生成 `finalpaper.md` 和 `finalpaper_cn.md`。
 
-完整的分步说明及 API token 设置请参见 `agent.md`。
+完整的分步说明及 API token 设置请参见 `SKILL.md`。
 
 ### 使用 MinerU Python SDK
 

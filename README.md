@@ -13,40 +13,43 @@ An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU
    - In-depth concept explanations
    - Figure-by-figure descriptions with embedded images
    - Historical context and academic circle analysis
-3. **Self-documenting** → `agent.md` serves as the onboard instruction for any compatible AI agent to continue processing additional papers without manual guidance.
+3. **Self-documenting** → `SKILL.md` serves as the onboard instruction for any compatible AI agent to continue processing additional papers without manual guidance.
 
 ## Directory Structure
 
 ```
 .
+├── SKILL.md                            # Agent skill instructions
 ├── README.md                           # This file (EN)
 ├── README_cn.md                        # This file (CN)
-├── agent.md                            # Agent instructions for the pipeline
-├── finalpaper.md                       # Final reading guide (English)
-├── finalpaper_cn.md                    # Final reading guide (Chinese)
-├── *.pdf                               # Source papers
+├── finalpaper.md                       # Sample output (English)
+├── finalpaper_cn.md                    # Sample output (Chinese)
+├── references/
+│   ├── mineru-api.md                   # MinerU API workflow reference
+│   ├── output-rules.md                 # finalpaper.md generation rules
+│   └── translation-rules.md            # Bilingual translation rules
 ├── .gitignore
 └── mineru/
     ├── manifest.json                   # Machine-readable processing state
-    ├── <paper-slug>/                   # One directory per paper
-    │   ├── full.md                     # MinerU Markdown output
-    │   ├── *_content_list.json         # Structured content inventory
-    │   ├── *_content_list_v2.json      # Page-grouped structured output
-    │   └── images/                     # Extracted figures
+    ├── <paper-slug>/
+    │   ├── full.md
+    │   ├── *_content_list.json
+    │   ├── *_content_list_v2.json
+    │   └── images/
 ```
 
 ## Quick Start
 
 ### Prerequisites
 
-- A [MinerU API token](https://mineru.net/apiManage/token). Replace `<YOUR_MINERU_API_TOKEN_HERE>` in `agent.md` with your token, or let the agent ask you for it.
+- A [MinerU API token](https://mineru.net/apiManage/token). Replace `<YOUR_MINERU_API_TOKEN_HERE>` in `SKILL.md` with your token, or let the agent ask you for it.
 - Python 3.10+ with `requests` library (or `pip install mineru-open-sdk`)
 - Git (for version control)
 
 ### Processing New Papers
 
 1. Drop PDF files into this directory.
-2. Run the agent workflow described in `agent.md`:
+2. Run the agent workflow described in `SKILL.md`:
    - Check `mineru/manifest.json` to skip already-processed papers
    - Upload unprocessed PDFs to MinerU Precision API:
      ```
@@ -57,7 +60,7 @@ An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU
    - Extract the result zip into `mineru/<paper-slug>/`
 3. After all PDFs are parsed, generate `finalpaper.md` and `finalpaper_cn.md`.
 
-See `agent.md` for complete step-by-step instructions and API token setup.
+See `SKILL.md` for complete step-by-step instructions and API token setup.
 
 ### Using the MinerU Python SDK
 
