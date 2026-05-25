@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "root": "D:\\documents\\papers\\ai",
+  "readme_output": "finalpaper.md",
+  "mineru_output_dir": "mineru",
+  "default_api": {
+    "base_url": "https://mineru.net/api/v4",
+    "upload_endpoint": "/file-urls/batch",
+    "batch_result_endpoint": "/extract-results/batch/{batch_id}",
+    "model_version": "vlm",
+    "language": "en",
+    "enable_formula": true,
+    "enable_table": true
+  },
+  "processed_papers": [
+    {
+      "source_pdf": "Attention Is All You Need.pdf",
+      "slug": "attention-is-all-you-need",
+      "status": "done",
+      "output_dir": "mineru/attention-is-all-you-need",
+      "full_md": "mineru/attention-is-all-you-need/full.md",
+      "content_list": "mineru/attention-is-all-you-need/f96e5869-12f6-434b-a2ec-7073478ccbae_content_list.json",
+      "content_list_v2": "mineru/attention-is-all-you-need/f96e5869-12f6-434b-a2ec-7073478ccbae_content_list_v2.json",
+      "image_count": 19,
+      "markdown_bytes": 43064,
+      "notes": "Parsed successfully with MinerU Precision API smoke test."
+    },
+    {
+      "source_pdf": "Learning representations by back-propagating errors.pdf",
+      "slug": "backpropagation-1986",
+      "status": "done",
+      "output_dir": "mineru/backpropagation-1986",
+      "full_md": "mineru/backpropagation-1986/full.md",
+      "content_list": "mineru/backpropagation-1986/759c3c27-c78f-4140-8494-da5a0948bc93_content_list.json",
+      "content_list_v2": "mineru/backpropagation-1986/759c3c27-c78f-4140-8494-da5a0948bc93_content_list_v2.json",
+      "image_count": 17,
+      "markdown_bytes": 33671,
+      "notes": "Parsed successfully with MinerU Precision API smoke test; OCR was enabled. Front noise before title is acceptable for this project."
+    }
+  ],
+  "skip_rule": "Do not upload a PDF again when it appears in processed_papers with status=done and its full_md file exists.",
+  "updated_at": "2026-05-25"
+}

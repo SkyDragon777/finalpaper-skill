@@ -1,0 +1,29 @@
+# MinerU API runtime artifacts (large, ephemeral)
+mineru/_api_runs/
+mineru/*.zip
+mineru/*_status.json
+mineru/*_response*.json
+mineru/*_extracted_files.txt
+
+# Original PDF copies inside mineru (redundant — sources are at root)
+mineru/*/*_origin.pdf
+
+# Large binary output (images are in subdirs, keep those)
+mineru/*/layout.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OpenCode
+.opencode/
