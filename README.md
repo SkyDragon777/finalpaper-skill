@@ -1,17 +1,17 @@
-# Paper-to-Markdown Pipeline — MinerU + Sisyphus
+# Paper-to-Markdown Pipeline — MinerU + AI Agent
 
-An opinionated pipeline that parses academic PDF papers into structured Markdown using the [MinerU Precision API](https://mineru.net), then generates a detailed bilingual reading guide (`finalpaper.md` / `finalpaper_cn.md`) with author backgrounds, concept explanations, and embedded figure-by-figure analysis — all driven by [opencode omo sisyphus](https://github.com/opendatalab/MinerU) agents.
+An opinionated pipeline that parses academic PDF papers into structured Markdown using the [MinerU Precision API](https://mineru.net), then generates a detailed bilingual reading guide (`finalpaper.md` / `finalpaper_cn.md`) with author backgrounds, concept explanations, and embedded figure-by-figure analysis — driven by any LLM-powered AI agent (Codex CLI, Claude Code, Cursor, etc.).
 
 ## What This Project Does
 
 1. **Parse PDFs** → MinerU cloud API extracts text, formulas (LaTeX), tables (HTML), figures, and structured metadata into `mineru/<paper-slug>/`.
-2. **Generate reading guides** → Sisyphus agents produce `finalpaper.md` (English) and `finalpaper_cn.md` (Chinese), each containing:
+2. **Generate reading guides** → The AI agent produces `finalpaper.md` (English) and `finalpaper_cn.md` (Chinese), each containing:
    - Author biographies with verified sources
    - Article overview and keyword definitions
    - In-depth concept explanations
    - Figure-by-figure descriptions with embedded images
    - Historical context and academic circle analysis
-3. **Self-documenting** → `agent.md` serves as the onboard instruction for any future agent to continue processing additional papers without manual guidance.
+3. **Self-documenting** → `agent.md` serves as the onboard instruction for any compatible AI agent to continue processing additional papers without manual guidance.
 
 ## Directory Structure
 
@@ -38,7 +38,7 @@ An opinionated pipeline that parses academic PDF papers into structured Markdown
 
 ### Prerequisites
 
-- A [MinerU API token](https://mineru.net/apiManage/token) (free tier: 1000 pages/day)
+- A [MinerU API token](https://mineru.net/apiManage/token)
 - Python 3.10+ with `requests` library (or `pip install mineru-open-sdk`)
 - Git (for version control)
 
@@ -67,15 +67,6 @@ client = MinerU("your-api-token")
 result = client.extract("./paper.pdf", model="vlm", language="en")
 result.save_all("./mineru/paper-slug/")
 ```
-
-## Example Output
-
-This repository includes pre-generated guides for two landmark AI papers:
-
-| Paper | finalpaper.md | finalpaper_cn.md |
-|---|---|---|
-| *Attention Is All You Need* (Vaswani et al., 2017) | §1 of `finalpaper.md` | §1 of `finalpaper_cn.md` |
-| *Learning Representations by Back-Propagating Errors* (Rumelhart, Hinton, Williams, 1986) | §2 of `finalpaper.md` | §2 of `finalpaper_cn.md` |
 
 ## Design Decisions
 

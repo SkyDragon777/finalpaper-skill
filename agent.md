@@ -1,22 +1,24 @@
-# Agent Instructions for This Paper Folder
+# Skill: PDF Paper Reading Guide Pipeline
 
-This folder contains PDF papers to be parsed with the official MinerU cloud Precision API and then summarized into a final `finalpaper.md`.
+This folder contains a reusable skill for parsing academic PDF papers with the [MinerU Precision API](https://mineru.net) and generating bilingual reading guides. Compatible with any LLM-powered agent (Codex CLI, Claude Code, Cursor, opencode, etc.).
+
+> **You are an AI agent executing this skill.** Follow the instructions below to parse PDFs and generate `finalpaper.md` / `finalpaper_cn.md`.
 
 ## Directory Contract
 
-- PDF files stay in this folder: `D:\documents\papers\ai\`.
-- The final human-facing `finalpaper.md` must be generated in this same folder, next to the PDFs.
+- PDF files stay in this folder.
+- The final output files `finalpaper.md` and `finalpaper_cn.md` must be generated in this same folder, next to the PDFs.
 - All MinerU parsing outputs, zip files, status files, manifests, and intermediate artifacts must stay under `mineru/`.
-- Do not create parsing outputs beside the PDFs except for the final `finalpaper.md`, `finalpaper_cn.md`, and this `agent.md` file.
+- Do not create parsing outputs beside the PDFs except for `finalpaper.md`, `finalpaper_cn.md`, and this skill file (`agent.md`).
 
 Recommended layout:
 
 ```text
-D:\documents\papers\ai\
+<your-project-folder>/
   *.pdf
   finalpaper.md             # final output (English)
   finalpaper_cn.md          # final output (Chinese)
-  agent.md                  # this file
+  agent.md                  # this skill file
   mineru/
     manifest.json           # machine-readable processed/skip list
     <paper-slug>/
@@ -197,7 +199,9 @@ For each paper, include:
 
 The front noise in some MinerU Markdown is acceptable. Do not discard an otherwise good parse only because text appears before the actual title; title detection can be handled during summary generation.
 
-## Recommended Processing Order for Future Agents
+## Recommended Processing Order
+
+When you execute this skill, follow this order:
 
 1. List root-level `*.pdf` files only. Ignore PDFs inside `mineru/` because those are MinerU output copies.
 2. Read `mineru/manifest.json`.
