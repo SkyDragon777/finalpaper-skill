@@ -38,7 +38,7 @@
 
 ### 前置条件
 
-- [MinerU API token](https://mineru.net/apiManage/token)
+- [MinerU API token](https://mineru.net/apiManage/token)。请将 `agent.md` 中的 `<YOUR_MINERU_API_TOKEN_HERE>` 替换为你的 token，或者让 agent 询问你后手动填入。
 - Python 3.10+，安装 `requests` 库（或通过 `pip install mineru-open-sdk`）
 - Git（用于版本控制）
 

@@ -38,7 +38,7 @@ An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU
 
 ### Prerequisites
 
-- A [MinerU API token](https://mineru.net/apiManage/token)
+- A [MinerU API token](https://mineru.net/apiManage/token). Replace `<YOUR_MINERU_API_TOKEN_HERE>` in `agent.md` with your token, or let the agent ask you for it.
 - Python 3.10+ with `requests` library (or `pip install mineru-open-sdk`)
 - Git (for version control)
 
