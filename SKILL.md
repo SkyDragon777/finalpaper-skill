@@ -1,5 +1,5 @@
 ---
-name: finalpaper
+name: finalpaper-skill
 description: >-
   Parse academic PDF papers (≤200 pages, ≤200 MB each) with MinerU Precision API and generate
   bilingual reading guides (finalpaper.md / finalpaper_cn.md) containing author backgrounds with
@@ -11,21 +11,20 @@ description: >-
 
 # finalpaper — AI Agent Paper Reading Report
 
-Parse all PDF papers in this folder with the [MinerU Precision API](https://mineru.net) and generate bilingual reading guides. Compatible with any LLM-powered agent (Codex CLI, Claude Code, Cursor, opencode, etc.).
+Parse all PDF papers in the user's working directory with the [MinerU Precision API](https://mineru.net) and generate bilingual reading guides. Compatible with any LLM-powered agent (Codex CLI, Claude Code, Cursor, opencode, etc.).
 
 ## Directory Contract
 
-- PDF files stay in this folder.
-- Output files `finalpaper.md` and `finalpaper_cn.md` go in this same folder, next to the PDFs.
-- All MinerU parsing outputs, zip files, status files, and manifests stay under `mineru/`.
-- Do not create parsing outputs beside the PDFs except for `finalpaper.md`, `finalpaper_cn.md`, and this skill file.
+- PDF files stay in the user's working directory (the folder containing the papers to process).
+- Output files `finalpaper.md` and `finalpaper_cn.md` are generated in that same working directory, next to the PDFs.
+- All MinerU parsing outputs, zip files, and manifests stay under `mineru/` within the working directory.
+- Do not create parsing outputs beside the PDFs except for `finalpaper.md` and `finalpaper_cn.md`.
 
 ```
-<project-folder>/
+<working-directory>/
   *.pdf
   finalpaper.md             # final output (English)
   finalpaper_cn.md          # final output (Chinese)
-  SKILL.md                  # this skill file
   mineru/
     manifest.json           # machine-readable processed/skip list
     <paper-slug>/
@@ -37,11 +36,11 @@ Parse all PDF papers in this folder with the [MinerU Precision API](https://mine
 
 ## Required API Token
 
-Replace `<YOUR_MINERU_API_TOKEN_HERE>` below with your [MinerU API token](https://mineru.net/apiManage/token). Do not commit it. If the token is missing, ask the user to provide it.
+This skill requires a [MinerU API token](https://mineru.net/apiManage/token). Obtain the token in this order:
 
-```text
-<YOUR_MINERU_API_TOKEN_HERE>
-```
+1. Read the `MINERU_API_TOKEN` environment variable. If it exists, use it silently.
+2. If the environment variable is not set, ask the user: "I need your MinerU API token. Get one at https://mineru.net/apiManage/token, then paste it here or set the `MINERU_API_TOKEN` environment variable."
+3. Do NOT write the token into any file. Do NOT echo it in logs. Use it only in `Authorization: Bearer <token>` headers to `https://mineru.net`.
 
 ## Skip Already-Processed Papers
 
@@ -62,7 +61,7 @@ Use stable lowercase slugs for output directories: remove `.pdf`, lowercase, rep
 
 ## Processing Order
 
-1. List root-level `*.pdf` files only (ignore PDFs inside `mineru/`).
+1. List `*.pdf` files in the working directory (ignore PDFs inside `mineru/`).
 2. Read `mineru/manifest.json` and skip all `done` papers.
 3. Upload only missing PDFs to MinerU Precision API → see [references/mineru-api.md](references/mineru-api.md).
 4. Store all outputs under `mineru/<paper-slug>/`.
@@ -76,3 +75,4 @@ Use stable lowercase slugs for output directories: remove `.pdf`, lowercase, rep
 | [references/mineru-api.md](references/mineru-api.md) | You need the exact MinerU Precision API workflow (upload, poll, download) |
 | [references/output-rules.md](references/output-rules.md) | You are generating `finalpaper.md` and need figure/table/formula rules |
 | [references/translation-rules.md](references/translation-rules.md) | You are generating `finalpaper_cn.md` and need Chinese translation rules |
+| [references/examples/](references/examples/) | You want to see sample outputs from running this skill on two papers |

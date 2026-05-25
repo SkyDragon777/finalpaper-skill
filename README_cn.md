@@ -4,6 +4,15 @@
 
 为 AI agent 设计的可复用技能：通过 [MinerU Precision API](https://mineru.net) 解析文件夹下所有 PDF 论文，生成包含作者背景、概念解释和内嵌逐图分析的双语阅读指南。每篇 PDF 需 ≤200 页且 ≤200 MB（MinerU API 限制）。
 
+## 安装
+
+```bash
+# 安装该 skill（触发名：finalpaper-skill）
+codex skill install --path . --name finalpaper-skill
+```
+
+仓库根目录即为 skill。触发名为 `finalpaper-skill`。
+
 ## 本项目做什么
 
 1. **解析 PDF** → MinerU 云端 API 提取文本、公式（LaTeX）、表格（HTML）、图示以及结构化元数据，输出至 `mineru/<paper-slug>/`。
@@ -42,7 +51,7 @@
 
 ### 前置条件
 
-- [MinerU API token](https://mineru.net/apiManage/token)。请将 `SKILL.md` 中的 `<YOUR_MINERU_API_TOKEN_HERE>` 替换为你的 token，或者让 agent 询问你后手动填入。
+- [MinerU API token](https://mineru.net/apiManage/token)。设置 `MINERU_API_TOKEN` 环境变量，或让 agent 主动询问。token 不会写入任何文件，仅在内存中用于 API 调用。
 - Python 3.10+，安装 `requests` 库（或通过 `pip install mineru-open-sdk`）
 - Git（用于版本控制）
 

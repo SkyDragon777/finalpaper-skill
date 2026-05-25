@@ -4,6 +4,15 @@
 
 An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU Precision API](https://mineru.net), then generate bilingual reading guides with author backgrounds, concept explanations, and embedded figure analysis. Each PDF must be ≤200 pages and ≤200 MB (MinerU API limits).
 
+## Installation
+
+```bash
+# Install the skill (trigger name: finalpaper-skill)
+codex skill install --path . --name finalpaper-skill
+```
+
+The skill root is the repository itself. The trigger name is `finalpaper-skill`.
+
 ## What This Project Does
 
 1. **Parse PDFs** → MinerU cloud API extracts text, formulas (LaTeX), tables (HTML), figures, and structured metadata into `mineru/<paper-slug>/`.
@@ -42,7 +51,7 @@ An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU
 
 ### Prerequisites
 
-- A [MinerU API token](https://mineru.net/apiManage/token). Replace `<YOUR_MINERU_API_TOKEN_HERE>` in `SKILL.md` with your token, or let the agent ask you for it.
+- A [MinerU API token](https://mineru.net/apiManage/token). Set the `MINERU_API_TOKEN` environment variable, or let the agent ask you for it. The token is never written to files — it is only used in-memory for API calls.
 - Python 3.10+ with `requests` library (or `pip install mineru-open-sdk`)
 - Git (for version control)
 
