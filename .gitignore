@@ -2,17 +2,7 @@
 *.pdf
 
 # MinerU API runtime artifacts (large, ephemeral)
-mineru/_api_runs/
-mineru/*.zip
-mineru/*_status.json
-mineru/*_response*.json
-mineru/*_extracted_files.txt
-
-# Original PDF copies inside mineru (redundant — sources are at root)
-mineru/*/*_origin.pdf
-
-# Large binary output (images are in subdirs, keep those)
-mineru/*/layout.json
+mineru/
 
 # OS
 .DS_Store
@@ -27,6 +17,10 @@ venv/
 # IDE
 .vscode/
 .idea/
+.obsidian/
 
 # OpenCode
 .opencode/
+
+# Agent runtime
+.omx/

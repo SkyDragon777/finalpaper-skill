@@ -62,7 +62,7 @@ Use stable lowercase slugs for output directories: remove `.pdf`, lowercase, rep
 ## Processing Order
 
 1. List `*.pdf` files in the working directory (ignore PDFs inside `mineru/`).
-2. Read `mineru/manifest.json` and skip all `done` papers.
+2. Read `mineru/manifest.json` if it exists. For each root PDF, skip it only when all three processed-paper conditions above are true; otherwise treat it as missing or incomplete.
 3. Upload only missing PDFs to MinerU Precision API → see [references/mineru-api.md](references/mineru-api.md).
 4. Store all outputs under `mineru/<paper-slug>/`.
 5. Update `mineru/manifest.json` after each successful parse.

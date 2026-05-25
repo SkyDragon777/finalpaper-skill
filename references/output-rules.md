@@ -11,7 +11,8 @@ After all PDFs have MinerU outputs, generate exactly one `finalpaper.md` in the 
 3. **Figure-by-figure explanations**:
    - The agent does not need to read image pixels.
    - Use `full.md`, figure captions, nearby paragraphs, and cross-references ("Figure 1", "see Fig. 2").
-   - Tag every claim: `[FROM CAPTION]` = verbatim from figure caption, `[FROM TEXT]` = from body text, `[INFERRED]` = deduced from context without direct support.
+   - Tag every claim with one exact bracket token: `[FROM CAPTION]` = verbatim from figure caption, `[FROM TEXT]` = from body text, `[FROM TABLE]` = from table content, `[INFERRED]` = deduced from context without direct support.
+   - Put section references outside the provenance tag, e.g. `[FROM TEXT]` (§3.2.1). Do not combine multiple sources inside one tag.
    - If the Markdown does not support a claim, say so instead of inventing.
 
 ## Image Embedding
@@ -41,7 +42,7 @@ Example: the Transformer paper has 5 figures but Figures 3–5 are appendix atte
 
 ## Table Preservation
 
-Preserve tables from the main body. Note their source with `[FROM TABLE, §section]`. Explain what the table shows and why it matters.
+Preserve tables from the main body. Note their source with `[FROM TABLE]` followed by the section reference, e.g. `[FROM TABLE]` (§6.2). Explain what the table shows and why it matters.
 
 ## Provenance Tags
 
@@ -51,8 +52,11 @@ All substantive claims must carry a provenance tag. Use consistently:
 |-----|---------|
 | `[FROM CAPTION]` | Exact text from the figure caption |
 | `[FROM TEXT]` | From body paragraphs discussing the figure |
+| `[FROM TABLE]` | From main-body table content |
 | `[INFERRED]` | Deduced from context, no direct quote |
 | `[UNVERIFIED]` | From external source, not yet confirmed |
+
+Use these exact bracket tokens only. Section names, section numbers, and short source notes belong immediately after the tag in parentheses, not inside the brackets.
 
 ## Quirks
 

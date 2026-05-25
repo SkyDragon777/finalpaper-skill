@@ -2,7 +2,7 @@
 
 This document summarizes two foundational papers in artificial intelligence, parsed via MinerU Precision API and analyzed by opencode omo sisyphus agent. Each paper entry includes author backgrounds, article overview, key concepts explained, and detailed figure-by-figure descriptions with embedded images.
 
-> **Processing notes**: All PDFs were parsed with MinerU Precision API (vlm backend, language=en). Figure descriptions are inferred from captions, surrounding text, and cross-references within the paper — not from pixel-level image reading. Provenance tags: `[FROM CAPTION]` = verbatim from figure caption, `[FROM TEXT]` = from body paragraphs discussing the figure, `[INFERRED]` = deduced from context without direct textual support.
+> **Processing notes**: All PDFs were parsed with MinerU Precision API (vlm backend, language=en). Figure descriptions are inferred from captions, surrounding text, and cross-references within the paper — not from pixel-level image reading. Provenance tags: `[FROM CAPTION]` = verbatim from figure caption, `[FROM TEXT]` = from body paragraphs discussing the figure, `[FROM TABLE]` = from table content, `[INFERRED]` = deduced from context without direct textual support.
 
 ---
 
@@ -122,21 +122,21 @@ $$
 
 #### Table 3 — Architecture Variations (Ablation Study)
 
-`[FROM TABLE, §6.2]` Rows (A): Varying number of attention heads while keeping total computation constant. Single-head attention ($h=1$, $d_k=512$) is 0.9 BLEU worse than the 8-head base model, confirming the benefit of multi-head. Too many heads ($h=32$, $d_k=16$) also degrades quality. Rows (B): Reducing attention key dimension $d_k$ hurts performance. Rows (C) and (D): Bigger models (more layers, wider dimensions) improve BLEU. Dropout is essential — without it, larger models overfit. Row (E): Learned positional embeddings perform nearly identically to sinusoidal ones.
+`[FROM TABLE]` (§6.2) Rows (A): Varying number of attention heads while keeping total computation constant. Single-head attention ($h=1$, $d_k=512$) is 0.9 BLEU worse than the 8-head base model, confirming the benefit of multi-head. Too many heads ($h=32$, $d_k=16$) also degrades quality. Rows (B): Reducing attention key dimension $d_k$ hurts performance. Rows (C) and (D): Bigger models (more layers, wider dimensions) improve BLEU. Dropout is essential — without it, larger models overfit. Row (E): Learned positional embeddings perform nearly identically to sinusoidal ones.
 
 #### Table 4 — Constituency Parsing Results
 
-`[FROM TABLE, §6.3]` The 4-layer Transformer achieves 91.3 F1 on WSJ Section 23 with only the WSJ training set, outperforming the Berkeley Parser (90.4). In the semi-supervised setting (17M additional sentences), it reaches 92.7 F1, approaching the Recurrent Neural Network Grammar (93.3). This demonstrates the Transformer generalizes beyond translation.
+`[FROM TABLE]` (§6.3) The 4-layer Transformer achieves 91.3 F1 on WSJ Section 23 with only the WSJ training set, outperforming the Berkeley Parser (90.4). In the semi-supervised setting (17M additional sentences), it reaches 92.7 F1, approaching the Recurrent Neural Network Grammar (93.3). This demonstrates the Transformer generalizes beyond translation.
 
 ### Figures — Detailed Explanations
 
 #### Figure 1: The Transformer — Model Architecture
 
-![Figure 1: The Transformer - model architecture](../../mineru/attention-is-all-you-need/images/d018247de7540bbbd7d638e7b3a9aa21d04567cb8492ac4ce39dc5526098c0b6.jpg)
+![Figure 1: The Transformer - model architecture](image/d018247de7540bbbd7d638e7b3a9aa21d04567cb8492ac4ce39dc5526098c0b6.jpg)
 
 **Caption** `[FROM CAPTION]`: "Figure 1: The Transformer — model architecture."
 
-**Analysis** `[INFERRED from text §3, §3.1]`: This is the iconic architecture diagram of the paper. The left half shows the Encoder stack and the right half shows the Decoder stack, connected by cross-attention arrows.
+**Analysis** `[INFERRED]` (§3, §3.1): This is the iconic architecture diagram of the paper. The left half shows the Encoder stack and the right half shows the Decoder stack, connected by cross-attention arrows.
 
 The **Encoder** (left): Input tokens pass through an embedding layer, then through positional encoding, then through $N=6$ identical layers. Each encoder layer has two sub-layers: (1) Multi-Head Self-Attention, and (2) Feed-Forward Network. Both sub-layers are wrapped in residual connections followed by layer normalization: $\text{LayerNorm}(x + \text{Sublayer}(x))$.
 
@@ -144,7 +144,7 @@ The **Decoder** (right): Similarly, $N=6$ identical layers, but each has three s
 
 The diagram uses color coding to show data flow: embedding vectors at bottom, intermediate representations flowing upward through layers, residual connections (bypass arrows), and the cross-attention connection from encoder to decoder.
 
-**Key detail from text** `[FROM TEXT §3.1]`: All sub-layers produce outputs of dimension $d_{\text{model}} = 512$. The decoder's self-attention is masked (future positions are set to $-\infty$ before softmax) to maintain the autoregressive property — predictions for position $i$ can only depend on known outputs at positions $< i$.
+**Key detail from text** `[FROM TEXT]` (§3.1): All sub-layers produce outputs of dimension $d_{\text{model}} = 512$. The decoder's self-attention is masked (future positions are set to $-\infty$ before softmax) to maintain the autoregressive property — predictions for position $i$ can only depend on known outputs at positions $< i$.
 
 **Uncertainty**: Without reading the pixels, the exact visual layout (positions of boxes, colors, arrow directions, labels inside sub-layer boxes) cannot be confirmed. The presence of "Add & Norm" labels near residual connections is inferred from the text description.
 
@@ -152,13 +152,13 @@ The diagram uses color coding to show data flow: embedding vectors at bottom, in
 
 #### Figure 2: Scaled Dot-Product Attention and Multi-Head Attention
 
-![Figure 2 left: Scaled Dot-Product Attention](../../mineru/attention-is-all-you-need/images/8e2f2d53c630b12bf40ffec663fc295c3e6e4d64b0fd9109a21e79c97ebecbba.jpg)
+![Figure 2 left: Scaled Dot-Product Attention](image/8e2f2d53c630b12bf40ffec663fc295c3e6e4d64b0fd9109a21e79c97ebecbba.jpg)
 
-![Figure 2 right: Multi-Head Attention](../../mineru/attention-is-all-you-need/images/be7b5c0abeb59a06bbff05163bc1662b675ddb4c993454cc3389bd4cba6d9d6f.jpg)
+![Figure 2 right: Multi-Head Attention](image/be7b5c0abeb59a06bbff05163bc1662b675ddb4c993454cc3389bd4cba6d9d6f.jpg)
 
 **Caption** `[FROM CAPTION]`: "Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel."
 
-**Left Panel — Scaled Dot-Product Attention** `[INFERRED from §3.2.1]`:
+**Left Panel — Scaled Dot-Product Attention** `[INFERRED]` (§3.2.1):
 This is a computational graph with three inputs ($Q$, $K$, $V$) at the bottom feeding upward. The operation sequence is:
 1. **MatMul**: $Q$ and $K$ are matrix-multiplied (dot product)
 2. **Scale**: Result is divided by $\sqrt{d_k}$
@@ -166,7 +166,7 @@ This is a computational graph with three inputs ($Q$, $K$, $V$) at the bottom fe
 4. **SoftMax**: Converts scores to probability weights
 5. **MatMul**: Weighted sum with $V$ produces the output
 
-**Right Panel — Multi-Head Attention** `[INFERRED from §3.2.2]`:
+**Right Panel — Multi-Head Attention** `[INFERRED]` (§3.2.2):
 This shows $h$ parallel "Scaled Dot-Product Attention" blocks (the left panel repeated horizontally $h=8$ times), each receiving its own linearly projected versions of $Q$, $K$, $V$. The flow:
 1. $V$, $K$, $Q$ enter at the bottom
 2. Each passes through $h$ separate **Linear** projections (learned weight matrices $W_i^Q, W_i^K, W_i^V$)
@@ -174,11 +174,11 @@ This shows $h$ parallel "Scaled Dot-Product Attention" blocks (the left panel re
 4. The $h$ outputs are **Concat**enated
 5. A final **Linear** projection ($W^O$) produces the output
 
-**Key detail from text** `[FROM TEXT §3.2.2]`: The dimension per head is $d_k = d_v = d_{\text{model}} / h = 64$ (with $d_{\text{model}} = 512$ and $h = 8$). This ensures the total computational cost stays similar to single-head attention.
+**Key detail from text** `[FROM TEXT]` (§3.2.2): The dimension per head is $d_k = d_v = d_{\text{model}} / h = 64$ (with $d_{\text{model}} = 512$ and $h = 8$). This ensures the total computational cost stays similar to single-head attention.
 
-**Cross-reference**: Figure 2's attention mechanism is used in three ways in the Transformer: encoder self-attention, decoder self-attention (masked), and encoder-decoder cross-attention. `(§3.2.3)`
+**Cross-reference** `[FROM TEXT]` (§3.2.3): Figure 2's attention mechanism is used in three ways in the Transformer: encoder self-attention, decoder self-attention (masked), and encoder-decoder cross-attention.
 
-> **Appendix Figures 3–5 (not shown)**: The paper's appendix includes three attention visualization figures demonstrating that individual attention heads learn interpretable linguistic functions — long-distance dependency resolution (Figure 3), anaphora resolution (Figure 4), and syntactic structure detection (Figure 5). These appear after the references in the original paper. See the MinerU output images at `../../mineru/attention-is-all-you-need/images/` for the extracted visualizations.
+> **Appendix Figures 3–5 (not shown)**: The paper's appendix includes three attention visualization figures demonstrating that individual attention heads learn interpretable linguistic functions — long-distance dependency resolution (Figure 3), anaphora resolution (Figure 4), and syntactic structure detection (Figure 5). These appear after the references in the original paper. The bundled example keeps only main-body display images; regenerate the report to obtain appendix images in the runtime `mineru/<paper-slug>/images/` folder.
 
 ---
 
@@ -318,27 +318,27 @@ The paper is honest: "The learning procedure, in its current form, is not a plau
 
 #### Figure 1: Mirror Symmetry Detection Network
 
-![Figure 1: A network that has learned to detect mirror symmetry](../../mineru/backpropagation-1986/images/8cda7eef5d88cd5ed1f26c025d9ac8b0f41180abaf820ed8753bea975beb0112.jpg)
+![Figure 1: A network that has learned to detect mirror symmetry](image/8cda7eef5d88cd5ed1f26c025d9ac8b0f41180abaf820ed8753bea975beb0112.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 1 A network that has learned to detect mirror symmetry in the input vector. The numbers on the arcs are weights and the numbers inside the nodes are biases. The learning required 1,425 sweeps through the set of 64 possible input vectors, with the weights being adjusted on the basis of the accumulated gradient after each sweep. The values of the parameters in equation (9) were $\varepsilon = 0.1$ and $\alpha = 0.9$. The initial weights were random and were uniformly distributed between $-0.3$ and $0.3$."
 
-**Analysis** `[FROM CAPTION + surrounding text]`: This figure shows a small neural network with input units (an array representing a binary vector), two hidden units, and one output unit. The key insight is how the weights encode the symmetry detection logic.
+**Analysis** `[FROM CAPTION]`: This figure shows a small neural network with input units (an array representing a binary vector), two hidden units, and one output unit. The key insight is how the weights encode the symmetry detection logic.
 
 The caption explains the elegant solution: "for a given hidden unit, weights that are symmetric about the middle of the input vector are equal in magnitude and opposite in sign." This means if a symmetric pattern is presented (e.g., left half mirrors right half), both hidden units receive zero net input from the input units. Because hidden units have negative biases, they both remain OFF. The output unit, with a positive bias, turns ON — signaling symmetry.
 
 For non-symmetric patterns, one hidden unit receives non-zero input and turns ON, suppressing the output unit. The weights on each side of the midpoint are in the ratio 1:2:4, ensuring each of the 8 possible patterns above the midpoint sends a unique activation sum — "so the only pattern below the midpoint that can exactly balance this sum is the symmetrical one."
 
-**Cross-reference** `[FROM TEXT §Results]`: This task was chosen because it cannot be solved by a single-layer network: "the activity in an individual input unit, considered alone, provides no evidence about the symmetry or non-symmetry of the whole input vector, so simply adding up the evidence from the individual input units is insufficient." "A more formal proof that intermediate units are required is given in ref. 2" (Minsky & Papert, Perceptrons, 1969).
+**Cross-reference** `[FROM TEXT]` (§Results): This task was chosen because it cannot be solved by a single-layer network: "the activity in an individual input unit, considered alone, provides no evidence about the symmetry or non-symmetry of the whole input vector, so simply adding up the evidence from the individual input units is insufficient." "A more formal proof that intermediate units are required is given in ref. 2" (Minsky & Papert, Perceptrons, 1969).
 
 ---
 
 #### Figure 2: Two Isomorphic Family Trees
 
-![Figure 2: Two isomorphic family trees](../../mineru/backpropagation-1986/images/6d295e9b79ba936abf007beb4005d97676f51657a806603ffbaa2970fa154783.jpg)
+![Figure 2: Two isomorphic family trees](image/6d295e9b79ba936abf007beb4005d97676f51657a806603ffbaa2970fa154783.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 2 Two isomorphic family trees. The information can be expressed as a set of triples of the form (person 1) (relationship) (person 2), where the possible relationships are {father, mother, husband, wife, son, daughter, uncle, aunt, brother, sister, nephew, niece}. A layered net can be said to 'know' these triples if it can produce the third term of each triple when given the first two. The first two terms are encoded by activating two of the input units, and the network must then complete the proposition by activating the output unit that represents the third term."
 
-**Analysis** `[FROM CAPTION + surrounding text]`: This figure shows two family trees — one English (with names like Christopher, Penelope, Andrew, Christine, etc.) and one Italian (Roberto, Maria, Pierro, Francesca, etc.). The trees are structurally identical (isomorphic) but the specific individuals differ. The purpose is to test whether the network can learn the relational structure underlying both trees and generalize across them.
+**Analysis** `[FROM CAPTION]`: This figure shows two family trees — one English (with names like Christopher, Penelope, Andrew, Christine, etc.) and one Italian (Roberto, Maria, Pierro, Francesca, etc.). The trees are structurally identical (isomorphic) but the specific individuals differ. The purpose is to test whether the network can learn the relational structure underlying both trees and generalize across them.
 
 The network is trained on a subset of possible (person, relationship, ?) triples. For example, if trained on (Colin, has-mother, Victoria), the network should learn that Colin always has Victoria as mother. But critically, if the Italian tree has a structurally equivalent relationship (say, Alfonso has-mother Lucia), the network should also learn to generalize from the English structure to the Italian one.
 
@@ -346,7 +346,7 @@ The network is trained on a subset of possible (person, relationship, ?) triples
 
 #### Figure 3: Activity Levels After Learning
 
-![Figure 3: Activity levels in a five-layer network after it has learned](../../mineru/backpropagation-1986/images/ba717e33950de776e125ff15df5171a86ba6c459f13ffa5870648f709bf77d85.jpg)
+![Figure 3: Activity levels in a five-layer network after it has learned](image/ba717e33950de776e125ff15df5171a86ba6c459f13ffa5870648f709bf77d85.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 3 Activity levels in a five-layer network after it has learned. The bottom layer has 24 input units on the left for representing ⟨person 1⟩ and 12 input units on the right for representing the relationship. The white squares inside these two groups show the activity levels of the units. There is one active unit in the first group representing Colin and one in the second group representing the relationship 'has-aunt'. Each of the two input groups is totally connected to its own group of 6 units in the second layer. These groups learn to encode people and relationships as distributed patterns of activity. The second layer is totally connected to the central layer of 12 units, and these are connected to the penultimate layer of 6 units. The activity in the penultimate layer must activate the correct output units, each of which stands for a particular ⟨person 2⟩. In this case, there are two correct answers (marked by black dots) because Colin has two aunts. Both the input units and the output units are laid out spatially with the English people in one row and the isomorphic Italians immediately below."
 
@@ -363,7 +363,7 @@ The specific example shows: input = (Colin, has-aunt). Since Colin (in the Engli
 
 #### Figure 4: Hidden Unit Receptive Fields (Weight Visualization)
 
-![Figure 4: Weights from the 24 input units to the 6 hidden units](../../mineru/backpropagation-1986/images/7d49fea9bdef05827688365ed83e2660af6f40ea80996241cd82ed505f4a4653.jpg)
+![Figure 4: Weights from the 24 input units to the 6 hidden units](image/7d49fea9bdef05827688365ed83e2660af6f40ea80996241cd82ed505f4a4653.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 4 The weights from the 24 input units that represent people to the 6 units in the second layer that learn distributed representations of people. White rectangles, excitatory weights; black rectangles, inhibitory weights; area of the rectangle encodes the magnitude of the weight. The weights from the 12 English people are in the top row of each unit. Unit 1 is primarily concerned with the distinction between English and Italian and most of the other units ignore this distinction. This means that the representation of an English person is very similar to the representation of their Italian equivalent. The network is making use of the isomorphism between the two family trees to allow it to share structure and it will therefore tend to generalize sensibly from one tree to the other. Unit 2 encodes which generation a person belongs to, and unit 6 encodes which branch of the family they come from."
 
@@ -379,7 +379,7 @@ The specific example shows: input = (Colin, has-aunt). Since Colin (in the Engli
 
 These features are "not at all explicit in the input and output encodings" — the input uses a localist "one unit per person" scheme, so these structured, compositional features emerged purely from learning. This is the central claim of the paper: that hidden units learn meaningful distributed representations.
 
-**Cross-reference** `[FROM TEXT §Results]`: "Because the hidden features capture the underlying structure of the task domain, the network generalizes correctly to the four triples on which it was not trained."
+**Cross-reference** `[FROM TEXT]` (§Results): "Because the hidden features capture the underlying structure of the task domain, the network generalizes correctly to the four triples on which it was not trained."
 
 **The weight-decay technique** `[FROM CAPTION]`: Weight decay (decrementing each weight by 0.2% after each update) was used for interpretability: "After prolonged learning, the decay was balanced by $\partial E/\partial w$, so the final magnitude of each weight indicates its usefulness in reducing the error." This is an early instance of what would later become L2 regularization in deep learning, used here for visualization rather than regularization.
 
@@ -387,11 +387,11 @@ These features are "not at all explicit in the input and output encodings" — t
 
 #### Figure 5: Synchronous Iterative Net = Layered Net
 
-![Figure 5: Equivalence between layered and recurrent networks](../../mineru/backpropagation-1986/images/53f049b8fd325454739808cbe1e56b18556019359db50a7993def81f4a2c8a7d.jpg)
+![Figure 5: Equivalence between layered and recurrent networks](image/53f049b8fd325454739808cbe1e56b18556019359db50a7993def81f4a2c8a7d.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 5 A synchronous iterative net that is run for three iterations and the equivalent layered net. Each time-step in the recurrent net corresponds to a layer in the layered net. The learning procedure for layered nets can be mapped into a learning procedure for iterative nets."
 
-**Analysis** `[FROM CAPTION + surrounding text]`: This figure demonstrates the equivalence between (a) a recurrent network run for 3 time steps, and (b) a feed-forward network with 3 layers. The key insight: you can "unroll" a recurrent network in time to create a layered network of the same depth, and then apply back-propagation to the unrolled network. This is the conceptual ancestor of **back-propagation through time** (BPTT), which would become the standard training algorithm for recurrent neural networks.
+**Analysis** `[FROM CAPTION]`: This figure demonstrates the equivalence between (a) a recurrent network run for 3 time steps, and (b) a feed-forward network with 3 layers. The key insight: you can "unroll" a recurrent network in time to create a layered network of the same depth, and then apply back-propagation to the unrolled network. This is the conceptual ancestor of **back-propagation through time** (BPTT), which would become the standard training algorithm for recurrent neural networks.
 
 Two practical complications are identified:
 1. "In an iterative net it is necessary to store the history of output states of each unit" — because the backward pass needs intermediate activations from the forward pass.
@@ -406,9 +406,9 @@ Two practical complications are identified:
 - **Date processed**: 2026-05-25
 - **Parser**: MinerU Precision API (vlm backend, language=en)
 - **Agent**: opencode omo sisyphus
-- **Source files**: 
-  - `Attention Is All You Need.pdf` → `../../mineru/attention-is-all-you-need/full.md`
-  - `Learning representations by back-propagating errors.pdf` → `../../mineru/backpropagation-1986/full.md`
-- **Manifest**: `../../mineru/manifest.json`
-- **Agent workflow**: `agent.md` in this directory
+- **Source files**:
+  - `Attention Is All You Need.pdf`
+  - `Learning representations by back-propagating errors.pdf`
+- **MinerU runtime outputs**: Not bundled in this skill repository; generated runs write `full.md`, content-list JSON, images, and `manifest.json` under the user's runtime `mineru/` folder.
+- **Agent workflow**: `SKILL.md` in the repository root
 - **Total papers processed**: 2 / 2

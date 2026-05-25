@@ -2,7 +2,7 @@
 
 本文档总结了人工智能领域的两篇奠基性论文，这些论文通过 MinerU Precision API 解析，并由 opencode omo sisyphus agent 分析。每篇论文条目包括作者背景、文章概览、关键概念解释，以及带有嵌入图像的逐图详细说明。
 
-> **处理说明**：所有 PDF 均使用 MinerU Precision API（vlm backend, language=en）解析。图示说明根据图注、周边文本以及论文内部交叉引用推断，而不是基于像素级图像读取。来源标签：`[FROM CAPTION]` = 逐字来自图注，`[FROM TEXT]` = 来自讨论该图的正文段落，`[INFERRED]` = 在没有直接文本支持的情况下根据上下文推断。
+> **处理说明**：所有 PDF 均使用 MinerU Precision API（vlm backend, language=en）解析。图示说明根据图注、周边文本以及论文内部交叉引用推断，而不是基于像素级图像读取。来源标签：`[FROM CAPTION]` = 逐字来自图注，`[FROM TEXT]` = 来自讨论该图的正文段落，`[FROM TABLE]` = 来自表格内容，`[INFERRED]` = 在没有直接文本支持的情况下根据上下文推断。
 
 ---
 
@@ -122,21 +122,21 @@ $$
 
 #### Table 3 — Architecture Variations (Ablation Study)
 
-`[FROM TABLE, §6.2]` 行 (A)：在保持总计算量不变的情况下改变 attention heads 数量。单头注意力（$h=1$, $d_k=512$）比 8-head base model 低 0.9 BLEU，证实了多头机制的收益。过多 head（$h=32$, $d_k=16$）也会降低质量。行 (B)：降低 attention key 维度 $d_k$ 会损害性能。行 (C) 和 (D)：更大的模型（更多层、更宽维度）提升 BLEU。Dropout 至关重要，没有它时，更大的模型会过拟合。行 (E)：学习式位置嵌入与正弦位置嵌入表现几乎相同。
+`[FROM TABLE]` (§6.2) 行 (A)：在保持总计算量不变的情况下改变 attention heads 数量。单头注意力（$h=1$, $d_k=512$）比 8-head base model 低 0.9 BLEU，证实了多头机制的收益。过多 head（$h=32$, $d_k=16$）也会降低质量。行 (B)：降低 attention key 维度 $d_k$ 会损害性能。行 (C) 和 (D)：更大的模型（更多层、更宽维度）提升 BLEU。Dropout 至关重要，没有它时，更大的模型会过拟合。行 (E)：学习式位置嵌入与正弦位置嵌入表现几乎相同。
 
 #### Table 4 — Constituency Parsing Results
 
-`[FROM TABLE, §6.3]` 4-layer Transformer 仅使用 WSJ training set，在 WSJ Section 23 上达到 91.3 F1，优于 Berkeley Parser（90.4）。在半监督设置中（额外 17M 句子），它达到 92.7 F1，接近 Recurrent Neural Network Grammar（93.3）。这表明 Transformer 可以泛化到翻译之外的任务。
+`[FROM TABLE]` (§6.3) 4-layer Transformer 仅使用 WSJ training set，在 WSJ Section 23 上达到 91.3 F1，优于 Berkeley Parser（90.4）。在半监督设置中（额外 17M 句子），它达到 92.7 F1，接近 Recurrent Neural Network Grammar（93.3）。这表明 Transformer 可以泛化到翻译之外的任务。
 
 ### Figures — Detailed Explanations
 
 #### Figure 1: The Transformer — Model Architecture
 
-![Figure 1: The Transformer - model architecture](../../mineruattention-is-all-you-need/images/d018247de7540bbbd7d638e7b3a9aa21d04567cb8492ac4ce39dc5526098c0b6.jpg)
+![Figure 1: The Transformer - model architecture](image/d018247de7540bbbd7d638e7b3a9aa21d04567cb8492ac4ce39dc5526098c0b6.jpg)
 
 **Caption** `[FROM CAPTION]`: "Figure 1: The Transformer — model architecture."
 
-**Analysis** `[INFERRED from text §3, §3.1]`: 这是论文中具有标志性的架构图。左半部分显示 Encoder stack，右半部分显示 Decoder stack，两者通过 cross-attention 箭头连接。
+**Analysis** `[INFERRED]` (§3, §3.1): 这是论文中具有标志性的架构图。左半部分显示 Encoder stack，右半部分显示 Decoder stack，两者通过 cross-attention 箭头连接。
 
 **Encoder**（左）：输入 token 先经过 embedding layer，再经过 positional encoding，然后通过 $N=6$ 个相同层。每个 encoder layer 有两个子层：(1) Multi-Head Self-Attention，(2) Feed-Forward Network。两个子层都包裹在残差连接中，随后进行 layer normalization：$\text{LayerNorm}(x + \text{Sublayer}(x))$。
 
@@ -144,7 +144,7 @@ $$
 
 该图使用颜色编码表示数据流：底部的 embedding vectors、向上流经各层的中间表示、残差连接（旁路箭头），以及从 encoder 到 decoder 的 cross-attention connection。
 
-**Key detail from text** `[FROM TEXT §3.1]`: 所有子层都产生维度为 $d_{\text{model}} = 512$ 的输出。decoder 的 self-attention 被 masked（future positions 在 softmax 前被设为 $-\infty$），以保持自回归性质，即位置 $i$ 的预测只能依赖于位置 $< i$ 的已知输出。
+**Key detail from text** `[FROM TEXT]` (§3.1): 所有子层都产生维度为 $d_{\text{model}} = 512$ 的输出。decoder 的 self-attention 被 masked（future positions 在 softmax 前被设为 $-\infty$），以保持自回归性质，即位置 $i$ 的预测只能依赖于位置 $< i$ 的已知输出。
 
 **Uncertainty**: 如果不读取像素，无法确认确切的视觉布局（框的位置、颜色、箭头方向、子层框内标签）。残差连接附近存在 “Add & Norm” 标签是根据文本描述推断的。
 
@@ -152,13 +152,13 @@ $$
 
 #### Figure 2: Scaled Dot-Product Attention and Multi-Head Attention
 
-![Figure 2 left: Scaled Dot-Product Attention](../../mineruattention-is-all-you-need/images/8e2f2d53c630b12bf40ffec663fc295c3e6e4d64b0fd9109a21e79c97ebecbba.jpg)
+![Figure 2 left: Scaled Dot-Product Attention](image/8e2f2d53c630b12bf40ffec663fc295c3e6e4d64b0fd9109a21e79c97ebecbba.jpg)
 
-![Figure 2 right: Multi-Head Attention](../../mineruattention-is-all-you-need/images/be7b5c0abeb59a06bbff05163bc1662b675ddb4c993454cc3389bd4cba6d9d6f.jpg)
+![Figure 2 right: Multi-Head Attention](image/be7b5c0abeb59a06bbff05163bc1662b675ddb4c993454cc3389bd4cba6d9d6f.jpg)
 
 **Caption** `[FROM CAPTION]`: "Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel."
 
-**Left Panel — Scaled Dot-Product Attention** `[INFERRED from §3.2.1]`:
+**Left Panel — Scaled Dot-Product Attention** `[INFERRED]` (§3.2.1):
 这是一个计算图，底部有三个输入（$Q$, $K$, $V$）向上流动。操作顺序为：
 1. **MatMul**: $Q$ 和 $K$ 进行矩阵乘法（点积）
 2. **Scale**: 结果除以 $\sqrt{d_k}$
@@ -166,7 +166,7 @@ $$
 4. **SoftMax**: 将分数转换为概率权重
 5. **MatMul**: 与 $V$ 的加权和产生输出
 
-**Right Panel — Multi-Head Attention** `[INFERRED from §3.2.2]`:
+**Right Panel — Multi-Head Attention** `[INFERRED]` (§3.2.2):
 这里显示 $h$ 个并行的 “Scaled Dot-Product Attention” 块（左图横向重复 $h=8$ 次），每个块接收各自线性投影后的 $Q$, $K$, $V$。流程如下：
 1. $V$, $K$, $Q$ 从底部进入
 2. 每个输入通过 $h$ 个独立的 **Linear** 投影（学习得到的权重矩阵 $W_i^Q, W_i^K, W_i^V$）
@@ -174,11 +174,11 @@ $$
 4. $h$ 个输出被 **Concat**enated
 5. 最终的 **Linear** 投影（$W^O$）产生输出
 
-**Key detail from text** `[FROM TEXT §3.2.2]`: 每个 head 的维度为 $d_k = d_v = d_{\text{model}} / h = 64$（其中 $d_{\text{model}} = 512$ 且 $h = 8$）。这保证总计算成本与单头注意力相近。
+**Key detail from text** `[FROM TEXT]` (§3.2.2): 每个 head 的维度为 $d_k = d_v = d_{\text{model}} / h = 64$（其中 $d_{\text{model}} = 512$ 且 $h = 8$）。这保证总计算成本与单头注意力相近。
 
-**Cross-reference**: Figure 2 的 attention mechanism 在 Transformer 中以三种方式使用：encoder self-attention、decoder self-attention（masked），以及 encoder-decoder cross-attention。`(§3.2.3)`
+**Cross-reference** `[FROM TEXT]` (§3.2.3): Figure 2 的 attention mechanism 在 Transformer 中以三种方式使用：encoder self-attention、decoder self-attention（masked），以及 encoder-decoder cross-attention。
 
-> **Appendix Figures 3–5 (not shown)**: 论文附录包含三幅注意力可视化图，展示单个 attention heads 学到可解释的语言功能：长距离依赖消解（Figure 3）、照应消解（Figure 4）和句法结构检测（Figure 5）。这些图出现在原论文参考文献之后。提取出的可视化图像见 MinerU output images：`../../mineruattention-is-all-you-need/images/`。
+> **Appendix Figures 3–5 (not shown)**: 论文附录包含三幅注意力可视化图，展示单个 attention heads 学到可解释的语言功能：长距离依赖消解（Figure 3）、照应消解（Figure 4）和句法结构检测（Figure 5）。这些图出现在原论文参考文献之后。仓库内置示例仅保留正文展示图片；重新生成报告时，附录图片会出现在运行时 `mineru/<paper-slug>/images/` 文件夹中。
 
 ---
 
@@ -318,27 +318,27 @@ $$E = \frac{1}{2} \sum_c \sum_j (y_{j,c} - d_{j,c})^2 \tag{3}$$
 
 #### Figure 1: Mirror Symmetry Detection Network
 
-![Figure 1: A network that has learned to detect mirror symmetry](../../minerubackpropagation-1986/images/8cda7eef5d88cd5ed1f26c025d9ac8b0f41180abaf820ed8753bea975beb0112.jpg)
+![Figure 1: A network that has learned to detect mirror symmetry](image/8cda7eef5d88cd5ed1f26c025d9ac8b0f41180abaf820ed8753bea975beb0112.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 1 A network that has learned to detect mirror symmetry in the input vector. The numbers on the arcs are weights and the numbers inside the nodes are biases. The learning required 1,425 sweeps through the set of 64 possible input vectors, with the weights being adjusted on the basis of the accumulated gradient after each sweep. The values of the parameters in equation (9) were $\varepsilon = 0.1$ and $\alpha = 0.9$. The initial weights were random and were uniformly distributed between $-0.3$ and $0.3$."
 
-**Analysis** `[FROM CAPTION + surrounding text]`: 该图展示了一个小型神经网络，其中包含 input units（表示二进制向量的数组）、两个 hidden units 和一个 output unit。关键洞见在于权重如何编码对称检测逻辑。
+**Analysis** `[FROM CAPTION]`: 该图展示了一个小型神经网络，其中包含 input units（表示二进制向量的数组）、两个 hidden units 和一个 output unit。关键洞见在于权重如何编码对称检测逻辑。
 
 图注解释了这个优雅解法：“for a given hidden unit, weights that are symmetric about the middle of the input vector are equal in magnitude and opposite in sign.” 这意味着，如果呈现一个对称模式（例如左半部分镜像右半部分），两个 hidden units 都会从 input units 接收到零净输入。由于 hidden units 有负 bias，它们都会保持 OFF。带有正 bias 的 output unit 会转为 ON，表示对称。
 
 对于非对称模式，一个 hidden unit 会接收到非零输入并转为 ON，从而抑制 output unit。中点两侧的权重比例为 1:2:4，确保中点上方的 8 种可能模式各自产生唯一的激活和，因此 “so the only pattern below the midpoint that can exactly balance this sum is the symmetrical one.”
 
-**Cross-reference** `[FROM TEXT §Results]`: 选择该任务是因为单层网络无法解决它：“the activity in an individual input unit, considered alone, provides no evidence about the symmetry or non-symmetry of the whole input vector, so simply adding up the evidence from the individual input units is insufficient.” “A more formal proof that intermediate units are required is given in ref. 2”（Minsky & Papert, Perceptrons, 1969）。
+**Cross-reference** `[FROM TEXT]` (§Results): 选择该任务是因为单层网络无法解决它：“the activity in an individual input unit, considered alone, provides no evidence about the symmetry or non-symmetry of the whole input vector, so simply adding up the evidence from the individual input units is insufficient.” “A more formal proof that intermediate units are required is given in ref. 2”（Minsky & Papert, Perceptrons, 1969）。
 
 ---
 
 #### Figure 2: Two Isomorphic Family Trees
 
-![Figure 2: Two isomorphic family trees](../../minerubackpropagation-1986/images/6d295e9b79ba936abf007beb4005d97676f51657a806603ffbaa2970fa154783.jpg)
+![Figure 2: Two isomorphic family trees](image/6d295e9b79ba936abf007beb4005d97676f51657a806603ffbaa2970fa154783.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 2 Two isomorphic family trees. The information can be expressed as a set of triples of the form (person 1) (relationship) (person 2), where the possible relationships are {father, mother, husband, wife, son, daughter, uncle, aunt, brother, sister, nephew, niece}. A layered net can be said to 'know' these triples if it can produce the third term of each triple when given the first two. The first two terms are encoded by activating two of the input units, and the network must then complete the proposition by activating the output unit that represents the third term."
 
-**Analysis** `[FROM CAPTION + surrounding text]`: 该图展示了两棵家族树，一棵 English（包含 Christopher、Penelope、Andrew、Christine 等名字），一棵 Italian（Roberto、Maria、Pierro、Francesca 等）。两棵树结构相同（isomorphic），但具体个体不同。其目的是测试网络是否能学习两棵树背后的关系结构，并在两者之间泛化。
+**Analysis** `[FROM CAPTION]`: 该图展示了两棵家族树，一棵 English（包含 Christopher、Penelope、Andrew、Christine 等名字），一棵 Italian（Roberto、Maria、Pierro、Francesca 等）。两棵树结构相同（isomorphic），但具体个体不同。其目的是测试网络是否能学习两棵树背后的关系结构，并在两者之间泛化。
 
 网络在一部分可能的 (person, relationship, ?) triples 上训练。例如，如果训练样本为 (Colin, has-mother, Victoria)，网络应学习 Colin 的 mother 总是 Victoria。但关键在于，如果 Italian tree 中存在结构等价关系（例如 Alfonso has-mother Lucia），网络也应该学习从 English structure 泛化到 Italian structure。
 
@@ -346,7 +346,7 @@ $$E = \frac{1}{2} \sum_c \sum_j (y_{j,c} - d_{j,c})^2 \tag{3}$$
 
 #### Figure 3: Activity Levels After Learning
 
-![Figure 3: Activity levels in a five-layer network after it has learned](../../minerubackpropagation-1986/images/ba717e33950de776e125ff15df5171a86ba6c459f13ffa5870648f709bf77d85.jpg)
+![Figure 3: Activity levels in a five-layer network after it has learned](image/ba717e33950de776e125ff15df5171a86ba6c459f13ffa5870648f709bf77d85.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 3 Activity levels in a five-layer network after it has learned. The bottom layer has 24 input units on the left for representing ⟨person 1⟩ and 12 input units on the right for representing the relationship. The white squares inside these two groups show the activity levels of the units. There is one active unit in the first group representing Colin and one in the second group representing the relationship 'has-aunt'. Each of the two input groups is totally connected to its own group of 6 units in the second layer. These groups learn to encode people and relationships as distributed patterns of activity. The second layer is totally connected to the central layer of 12 units, and these are connected to the penultimate layer of 6 units. The activity in the penultimate layer must activate the correct output units, each of which stands for a particular ⟨person 2⟩. In this case, there are two correct answers (marked by black dots) because Colin has two aunts. Both the input units and the output units are laid out spatially with the English people in one row and the isomorphic Italians immediately below."
 
@@ -363,7 +363,7 @@ $$E = \frac{1}{2} \sum_c \sum_j (y_{j,c} - d_{j,c})^2 \tag{3}$$
 
 #### Figure 4: Hidden Unit Receptive Fields (Weight Visualization)
 
-![Figure 4: Weights from the 24 input units to the 6 hidden units](../../minerubackpropagation-1986/images/7d49fea9bdef05827688365ed83e2660af6f40ea80996241cd82ed505f4a4653.jpg)
+![Figure 4: Weights from the 24 input units to the 6 hidden units](image/7d49fea9bdef05827688365ed83e2660af6f40ea80996241cd82ed505f4a4653.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 4 The weights from the 24 input units that represent people to the 6 units in the second layer that learn distributed representations of people. White rectangles, excitatory weights; black rectangles, inhibitory weights; area of the rectangle encodes the magnitude of the weight. The weights from the 12 English people are in the top row of each unit. Unit 1 is primarily concerned with the distinction between English and Italian and most of the other units ignore this distinction. This means that the representation of an English person is very similar to the representation of their Italian equivalent. The network is making use of the isomorphism between the two family trees to allow it to share structure and it will therefore tend to generalize sensibly from one tree to the other. Unit 2 encodes which generation a person belongs to, and unit 6 encodes which branch of the family they come from."
 
@@ -379,7 +379,7 @@ $$E = \frac{1}{2} \sum_c \sum_j (y_{j,c} - d_{j,c})^2 \tag{3}$$
 
 这些特征 “not at all explicit in the input and output encodings”：输入使用 localist 的 “one unit per person” 方案，因此这些结构化、组合式特征完全是从学习中涌现的。这是论文的核心主张：hidden units 会学习有意义的 distributed representations。
 
-**Cross-reference** `[FROM TEXT §Results]`: “Because the hidden features capture the underlying structure of the task domain, the network generalizes correctly to the four triples on which it was not trained.”
+**Cross-reference** `[FROM TEXT]` (§Results): “Because the hidden features capture the underlying structure of the task domain, the network generalizes correctly to the four triples on which it was not trained.”
 
 **The weight-decay technique** `[FROM CAPTION]`: Weight decay（每次更新后将每个权重递减 0.2%）用于可解释性：“After prolonged learning, the decay was balanced by $\partial E/\partial w$, so the final magnitude of each weight indicates its usefulness in reducing the error.” 这是后来深度学习中 L2 regularization 的早期实例之一，不过此处用于可视化，而不是正则化。
 
@@ -387,11 +387,11 @@ $$E = \frac{1}{2} \sum_c \sum_j (y_{j,c} - d_{j,c})^2 \tag{3}$$
 
 #### Figure 5: Synchronous Iterative Net = Layered Net
 
-![Figure 5: Equivalence between layered and recurrent networks](../../minerubackpropagation-1986/images/53f049b8fd325454739808cbe1e56b18556019359db50a7993def81f4a2c8a7d.jpg)
+![Figure 5: Equivalence between layered and recurrent networks](image/53f049b8fd325454739808cbe1e56b18556019359db50a7993def81f4a2c8a7d.jpg)
 
 **Caption** `[FROM CAPTION]`: "Fig. 5 A synchronous iterative net that is run for three iterations and the equivalent layered net. Each time-step in the recurrent net corresponds to a layer in the layered net. The learning procedure for layered nets can be mapped into a learning procedure for iterative nets."
 
-**Analysis** `[FROM CAPTION + surrounding text]`: 该图展示了 (a) 运行 3 个时间步的 recurrent network 与 (b) 3 层 feed-forward network 之间的等价性。关键洞见是：可以在时间上 “unroll” 一个 recurrent network，创建一个相同深度的 layered network，然后对展开后的网络应用 back-propagation。这是**通过时间反向传播（back-propagation through time）**（BPTT）的概念祖先，后者后来成为 recurrent neural networks 的标准训练算法。
+**Analysis** `[FROM CAPTION]`: 该图展示了 (a) 运行 3 个时间步的 recurrent network 与 (b) 3 层 feed-forward network 之间的等价性。关键洞见是：可以在时间上 “unroll” 一个 recurrent network，创建一个相同深度的 layered network，然后对展开后的网络应用 back-propagation。这是**通过时间反向传播（back-propagation through time）**（BPTT）的概念祖先，后者后来成为 recurrent neural networks 的标准训练算法。
 
 文中指出两个实际复杂点：
 1. “In an iterative net it is necessary to store the history of output states of each unit” — 因为 backward pass 需要 forward pass 中的中间激活。
@@ -407,8 +407,8 @@ $$E = \frac{1}{2} \sum_c \sum_j (y_{j,c} - d_{j,c})^2 \tag{3}$$
 - **解析器**: MinerU Precision API (vlm backend, language=en)
 - **Agent**: opencode omo sisyphus
 - **源文件**:
-  - `Attention Is All You Need.pdf` → `../../mineruattention-is-all-you-need/full.md`
-  - `Learning representations by back-propagating errors.pdf` → `../../minerubackpropagation-1986/full.md`
-- **Manifest**: `../../minerumanifest.json`
-- **Agent workflow**: 本目录中的 `agent.md`
+  - `Attention Is All You Need.pdf`
+  - `Learning representations by back-propagating errors.pdf`
+- **MinerU runtime outputs**: 本 skill 仓库不内置运行产物；重新运行时，`full.md`、content-list JSON、图片和 `manifest.json` 会写入用户运行目录下的 `mineru/`。
+- **Agent workflow**: 仓库根目录中的 `SKILL.md`
 - **处理论文总数**: 2 / 2

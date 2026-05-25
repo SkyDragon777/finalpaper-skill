@@ -23,7 +23,7 @@ Keep UNCHANGED:
 - Image markdown syntax (`![...](...)`)
 - Table markdown
 - Citation markers like `(§3.2.1)`
-- Provenance tags: `[FROM CAPTION]`, `[FROM TEXT]`, `[INFERRED]`, `[UNVERIFIED]`
+- Provenance tags: `[FROM CAPTION]`, `[FROM TEXT]`, `[FROM TABLE]`, `[INFERRED]`, `[UNVERIFIED]`
 - URLs and links
 - Code blocks and technical identifiers
 

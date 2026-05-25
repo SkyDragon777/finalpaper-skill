@@ -31,20 +31,27 @@ The skill root is the repository itself. The trigger name is `finalpaper-skill`.
 ├── SKILL.md                            # Agent skill instructions
 ├── README.md                           # This file (EN)
 ├── README_cn.md                        # This file (CN)
-├── finalpaper.md                       # Sample output (English)
-├── finalpaper_cn.md                    # Sample output (Chinese)
 ├── references/
 │   ├── mineru-api.md                   # MinerU API workflow reference
 │   ├── output-rules.md                 # finalpaper.md generation rules
-│   └── translation-rules.md            # Bilingual translation rules
-├── .gitignore
-└── mineru/
-    ├── manifest.json                   # Machine-readable processing state
-    ├── <paper-slug>/
-    │   ├── full.md
-    │   ├── *_content_list.json
-    │   ├── *_content_list_v2.json
-    │   └── images/
+│   ├── translation-rules.md            # Bilingual translation rules
+│   └── examples/
+│       ├── finalpaper.md               # Sample output (English)
+│       ├── finalpaper_cn.md            # Sample output (Chinese)
+│       └── image/                      # Images used only by the examples
+└── .gitignore
+```
+
+Runtime MinerU outputs are generated in the user's paper directory and ignored by this repository:
+
+```
+mineru/
+├── manifest.json
+└── <paper-slug>/
+    ├── full.md
+    ├── *_content_list.json
+    ├── *_content_list_v2.json
+    └── images/
 ```
 
 ## Quick Start
@@ -59,7 +66,7 @@ The skill root is the repository itself. The trigger name is `finalpaper-skill`.
 
 1. Drop PDF files into this directory.
 2. Run the agent workflow described in `SKILL.md`:
-   - Check `mineru/manifest.json` to skip already-processed papers
+   - Check `mineru/manifest.json` and skip a paper only when `status: "done"`, `full_md`, and a content-list JSON are all present
    - Upload unprocessed PDFs to MinerU Precision API:
      ```
      POST https://mineru.net/api/v4/file-urls/batch
@@ -85,7 +92,7 @@ result.save_all("./mineru/paper-slug/")
 
 - **Bilingual output**: English for precision, Chinese for accessibility. Both files share identical structure and image references.
 - **Body-only figures**: Only figures from the main paper body are included. Appendix visualizations are noted but not embedded, keeping the guide focused on core content.
-- **Provenance tags**: Every claim is tagged `[FROM CAPTION]`, `[FROM TEXT]`, or `[INFERRED]` so readers can trace information back to its source.
-- **Self-contained images**: Figures are referenced from `mineru/<slug>/images/` using relative paths — no external hosting needed.
+- **Provenance tags**: Every claim is tagged `[FROM CAPTION]`, `[FROM TEXT]`, `[FROM TABLE]`, or `[INFERRED]` so readers can trace information back to its source.
+- **Self-contained images**: Generated reports reference figures from `mineru/<slug>/images/`; bundled examples keep their display images under `references/examples/image/` so the skill repository does not need committed MinerU runtime output.
 
 

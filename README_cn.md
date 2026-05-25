@@ -31,20 +31,27 @@ codex skill install --path . --name finalpaper-skill
 ├── SKILL.md                            # Agent skill 说明
 ├── README.md                           # 本文件（英文）
 ├── README_cn.md                        # 本文件（中文）
-├── finalpaper.md                       # 示例输出（英文）
-├── finalpaper_cn.md                    # 示例输出（中文）
 ├── references/
 │   ├── mineru-api.md                   # MinerU API 工作流参考
 │   ├── output-rules.md                 # finalpaper.md 生成规则
-│   └── translation-rules.md            # 双语翻译规则
-├── .gitignore
-└── mineru/
-    ├── manifest.json                   # 机器可读的处理状态
-    ├── <paper-slug>/
-    │   ├── full.md
-    │   ├── *_content_list.json
-    │   ├── *_content_list_v2.json
-    │   └── images/
+│   ├── translation-rules.md            # 双语翻译规则
+│   └── examples/
+│       ├── finalpaper.md               # 示例输出（英文）
+│       ├── finalpaper_cn.md            # 示例输出（中文）
+│       └── image/                      # 仅供示例显示的图片
+└── .gitignore
+```
+
+运行时 MinerU 输出会生成在用户的论文目录中，并被本仓库忽略：
+
+```
+mineru/
+├── manifest.json
+└── <paper-slug>/
+    ├── full.md
+    ├── *_content_list.json
+    ├── *_content_list_v2.json
+    └── images/
 ```
 
 ## 快速开始
@@ -59,7 +66,7 @@ codex skill install --path . --name finalpaper-skill
 
 1. 将 PDF 文件放入本目录。
 2. 按照 `SKILL.md` 中描述的 agent 工作流运行：
-   - 检查 `mineru/manifest.json`，跳过已处理的论文
+   - 检查 `mineru/manifest.json`，仅当 `status: "done"`、`full_md` 和 content-list JSON 都存在时才跳过该论文
    - 将未处理的 PDF 上传至 MinerU Precision API：
      ```
      POST https://mineru.net/api/v4/file-urls/batch
@@ -85,7 +92,7 @@ result.save_all("./mineru/paper-slug/")
 
 - **双语输出**：英文保证精确性，中文降低阅读门槛。两份文件采用相同结构和图片引用。
 - **仅正文图示**：仅收录论文正文中的图示。附录可视化会注明但不嵌入，使指南聚焦核心内容。
-- **来源标签**：每条论断均标注 `[FROM CAPTION]`、`[FROM TEXT]` 或 `[INFERRED]`，方便读者追溯信息来源。
-- **自包含图片**：图示使用相对路径从 `mineru/<slug>/images/` 引用——无需外部托管。
+- **来源标签**：每条论断均标注 `[FROM CAPTION]`、`[FROM TEXT]`、`[FROM TABLE]` 或 `[INFERRED]`，方便读者追溯信息来源。
+- **自包含图片**：生成的报告从 `mineru/<slug>/images/` 以相对路径引用图示；仓库内置示例的显示图片集中放在 `references/examples/image/`，因此 skill 仓库不需要提交 MinerU 运行产物。
 
 
