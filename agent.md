@@ -42,20 +42,15 @@ Use the official MinerU Precision API token below for this local workflow only. 
 
 Get your free token at: https://mineru.net/apiManage/token
 
-## Already Processed Papers — Do Not Re-upload
+## Skip Already-Processed Papers
 
-These PDFs have already been processed by MinerU. If their `full.md` exists, skip upload and reuse the parsed outputs.
-
-| Source PDF | Output directory | Main Markdown | Status | Notes |
-|---|---|---|---|---|
-| `Attention Is All You Need.pdf` | `mineru/attention-is-all-you-need/` | `mineru/attention-is-all-you-need/full.md` | done | Good parse; title/authors/abstract/figures present. |
-| `Learning representations by back-propagating errors.pdf` | `mineru/backpropagation-1986/` | `mineru/backpropagation-1986/full.md` | done | Good enough parse; OCR enabled; front noise before the title is acceptable. |
-
-Also read `mineru/manifest.json`; it is the machine-readable skip list. A PDF is considered already processed when:
+Always consult `mineru/manifest.json` before uploading. A PDF is already processed when:
 
 1. It appears in `mineru/manifest.json` under `processed_papers` with `status: "done"`, and
 2. The corresponding `full_md` path exists, and
 3. At least one `*_content_list.json` or `*_content_list_v2.json` exists in the same output directory.
+
+If all three conditions are met, skip the upload and reuse the existing parsed outputs. Do NOT maintain a duplicate list of processed papers in this file — `manifest.json` is the single source of truth.
 
 ## Official MinerU Precision API Workflow
 
@@ -191,10 +186,11 @@ For each paper, include:
    - Do NOT convert formulas to plain Unicode/ASCII text. Keep the original LaTeX from `full.md` so they render correctly in Markdown viewers with MathJax/KaTeX support.
 5. **Appendix content filtering**: Only include figures and tables that appear in the main body of the paper (i.e., before the References / Acknowledgements section). Do NOT include appendix-only figures/tables unless they are truly essential to understanding the paper's core contribution. When appendix content is excluded, add a brief note in the output listing what was omitted and where the extracted images can be found (e.g., `mineru/<paper-slug>/images/`). Example: the Transformer paper has 5 figures but Figures 3–5 are attention visualization appendix figures — only Figures 1–2 (architecture and attention mechanism) belong in the main body.
 6. **Bilingual output**: Alongside the English `finalpaper.md`, generate a Chinese version `finalpaper_cn.md` in the same directory. Translation rules:
-   - Translate all explanatory text, analysis paragraphs, and concept explanations to natural Chinese (简体中文).
+   - Translate all explanatory text, analysis paragraphs, concept explanations, and author background descriptions to natural Chinese (简体中文).
    - Keep UNCHANGED: paper titles, author names, institution names, figure captions (original English), ALL mathematical formulas, image markdown syntax, table markdown, citation markers, provenance tags like `[FROM CAPTION]`, URLs.
    - For technical terms on first occurrence, use the form "自注意力（Self-Attention）" — Chinese term first, English in parentheses.
    - The Processing Metadata section at the bottom can be fully in Chinese.
+   - Both `### Author Information` table headers (`作者`, `所属机构（发表时）`, `背景与学术圈`) and the background text within the table MUST be translated.
    - Maintain EXACT same section structure, image paths, and formula blocks. Only the narrative text between these elements changes language.
 
 The front noise in some MinerU Markdown is acceptable. Do not discard an otherwise good parse only because text appears before the actual title; title detection can be handled during summary generation.
