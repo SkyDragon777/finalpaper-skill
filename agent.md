@@ -28,8 +28,6 @@ Recommended layout:
       *_model.json
       layout.json
       images/
-    _api_runs/
-      ...                   # API response logs, downloaded zips, temporary run artifacts
 ```
 
 ## MinerU API Token
@@ -133,8 +131,7 @@ When `state == "failed"`, record `err_msg` and do not silently retry forever.
 
 ### 4. Download and unpack results
 
-Download `full_zip_url` into `mineru/_api_runs/<run-id>/` or directly archive it under `mineru/`.
-Extract its contents into:
+Download `full_zip_url` and extract its contents directly into:
 
 ```text
 mineru/<paper-slug>/

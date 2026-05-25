@@ -33,7 +33,6 @@ An opinionated skill for AI agents: parse all PDF papers in a folder via [MinerU
     │   ├── *_content_list.json         # Structured content inventory
     │   ├── *_content_list_v2.json      # Page-grouped structured output
     │   └── images/                     # Extracted figures
-    └── _api_runs/                      # API response logs (ephemeral)
 ```
 
 ## Quick Start

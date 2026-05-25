@@ -33,7 +33,6 @@
     │   ├── *_content_list.json         # 结构化内容清单
     │   ├── *_content_list_v2.json      # 按页分组的结构化输出
     │   └── images/                     # 提取的图示
-    └── _api_runs/                      # API 响应日志（临时文件）
 ```
 
 ## 快速开始
