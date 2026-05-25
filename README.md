@@ -75,6 +75,4 @@ result.save_all("./mineru/paper-slug/")
 - **Provenance tags**: Every claim is tagged `[FROM CAPTION]`, `[FROM TEXT]`, or `[INFERRED]` so readers can trace information back to its source.
 - **Self-contained images**: Figures are referenced from `mineru/<slug>/images/` using relative paths — no external hosting needed.
 
-## License
 
-This project structure and documentation are provided as-is. The included paper summaries are derivative works for educational purposes. Original papers retain their respective copyrights.

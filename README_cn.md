@@ -75,6 +75,4 @@ result.save_all("./mineru/paper-slug/")
 - **来源标签**：每条论断均标注 `[FROM CAPTION]`、`[FROM TEXT]` 或 `[INFERRED]`，方便读者追溯信息来源。
 - **自包含图片**：图示使用相对路径从 `mineru/<slug>/images/` 引用——无需外部托管。
 
-## 许可证
 
-本项目结构及文档系按原样提供。所收录的论文摘要为基于教育目的之衍生作品。原始论文保留其各自版权。
